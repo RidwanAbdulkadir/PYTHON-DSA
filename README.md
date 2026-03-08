@@ -1,4 +1,4 @@
-# Data Structures and Algorithms in Python
+## Data Structures and Algorithms in Python
 
 This course is a beginner-friendly introduction to common data structures (linked lists, stacks, queues, graphs) and algorithms (search, sorting, recursion, dynamic programming) in Python. This course will help you ace coding assessments and technical interviews.
 
