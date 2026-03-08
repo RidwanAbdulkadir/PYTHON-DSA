@@ -65,3 +65,6 @@ Lesson 6 - Python Interview Questions, Tips & Advice
 - Practice questions and solutions
 - Tips for solving coding challenges
 - Advice for cracking coding interviews
+
+
+Happy Learning! 🥳🥳🥳
