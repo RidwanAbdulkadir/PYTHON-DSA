@@ -153,15 +153,50 @@ DYNAMIC PROGRAMMING APPROACH: It is a bottom-up approach where we iteratively fi
 3. The rest of the logic remains the same as the recursive approach, but with the added benefit of avoiding redundant calculations, which can significantly improve performance for larger inputs.
 4. The time complexity of this approach is O(m*n) and the space complexity is also O(m*n) due to the 2D array storing results for each pair of indices.
 '''
+# def lcs_dp(seq1, seq2):
+#     m, n = len(seq1), len(seq2)
+#     dp = [[0] * (n + 1) for _ in range(m + 1)]
+    
+#     for i in range(1, m + 1):
+#         for j in range(1, n + 1):
+#             if seq1[i - 1] == seq2[j - 1]:
+#                 dp[i][j] = dp[i - 1][j - 1] + 1
+#             else:
+#                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    
+#     return dp[m][n]
+
+# another attempt
 def lcs_dp(seq1, seq2):
-    m, n = len(seq1), len(seq2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if seq1[i - 1] == seq2[j - 1]:
-                dp[i][j] = dp[i - 1][j - 1] + 1
+    n1, n2 = len(seq1), len(seq2)
+    table = [[0 for _ in range(n2 + 1)] for _ in range(n1 + 1)]
+    for i in range(n1):
+        for j in range(n2):
+            if seq1[i] == seq2[j]: 
+                table[i + 1][j + 1] = 1 + table[i][j]
             else:
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
-    
-    return dp[m][n]
+                table[i + 1][j + 1] = max(table[i][j], table[i + 1][j])
+    return table[-1][-1]
+
+if test0 == 7 and test1 == 3 and test2 == 0 and test3 == 3 and test4 == 0 and test5 == 0 and test6 == 3 and test7 == 4:
+    print("All test cases passed!")
+else:    print("Some test cases failed.")
+
+if __name__ == "__main__":
+
+    test_cases = [
+        ("serendipitous", "precipitation"),
+        ([1, 2, 3, 4], [2, 3, 4, 5]),
+        ("abc", "def"),
+        ("abc", "abc"),
+        ("", "abc"),
+        ("", ""),
+        ("abcdef", "badcfe"),
+        ("AGGTAB", "GXTXAYB")
+    ]
+    for seq1, seq2 in test_cases:
+        print(f"seq1: {seq1}, seq2: {seq2}")
+        start = time.time()
+        result = lcs_dp(seq1, seq2)
+        end = time.time()
+        print(f"Result: {result}, Time taken: {end - start:.4f} seconds")
