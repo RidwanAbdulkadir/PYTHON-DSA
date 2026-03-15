@@ -200,3 +200,154 @@ if __name__ == "__main__":
         result = lcs_dp(seq1, seq2)
         end = time.time()
         print(f"Result: {result}, Time taken: {end - start:.4f} seconds")
+
+'''
+DYNAMIC PROGRAMMING: KNAPSACK PROBLEM
+
+You're in charge of selecting a football (soccer) team from a large pool of players. Each player has a cost and a rating. You have a limited budget. What is the highest total rating of a team that fits within your budget. Assume that there's no minimum or maximum team size.
+
+General problem statement:
+Given n elements, each of which has a weight and a profit, determine the maximum profit that can be obtained by selecting a subset of the elements weighing no more than w.
+
+Input:
+1. `weights`: A list of numbers containing weights
+2. `profits`: A list of numbers containing profits (same as weights but with different values)
+3. `capacity`: The maximum weight the knapsack can hold
+
+Output:
+1. `max_profit`: The maximum profit that can be obtained by selecting a subset of the elements weighing no more than capacity.
+
+Test cases:
+1. All the elemnents can be included in the knapsack
+2. No elements can be included in the knapsack
+3. Some elements can be included in the knapsack
+4. Multiple combinations of elements can be included in the knapsack
+5. Empty weights and profits
+6. Only one element can be included in the knapsack
+7. Weights and profits are the same
+8. Weights and profits are different
+9. Capacity is zero
+10. Weights and profits have different lengths (invalid input)
+11. You do not use the complete capacity 
+'''
+
+# attempt 1 using recursive approach
+def max_profit(weights, profits, capacity):
+    def helper(idx, remaining_capacity):
+        if idx >= len(weights) or remaining_capacity <= 0:
+            return 0
+        
+        # Case 1: Include the current item
+        include_profit = 0
+        if weights[idx] <= remaining_capacity:
+            include_profit = profits[idx] + helper(idx + 1, remaining_capacity - weights[idx])
+        
+        # Case 2: Exclude the current item
+        exclude_profit = helper(idx + 1, remaining_capacity)
+        
+        return max(include_profit, exclude_profit)
+    
+    return helper(0, capacity)
+
+test0 = {
+    'input' : {
+        'capacity': 10,
+        'weights': [1, 2, 3],   
+        'profits': [10, 15, 40]
+    },
+    'output' : 55
+}
+
+test1 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [6, 7, 8],   
+        'profits': [10, 15, 40]
+    },
+    'output' : 0
+}
+
+test2 = {
+    'input' : {
+        'capacity': 6,
+        'weights': [1, 2, 3],   
+        'profits': [10, 15, 40]
+    },
+    'output' : 55
+}
+
+test3 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [1, 2, 3],   
+        'profits': [10, 15, 40]
+    },
+    'output' : 25
+}
+
+test4 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [],   
+        'profits': []
+    },
+    'output' : 0
+}
+
+test5 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [1],   
+        'profits': [10]
+    },
+    'output' : 10
+}
+
+test6 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [1, 2, 3],   
+        'profits': [1, 2, 3]
+    },
+    'output' : 5
+}
+
+test7 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [1, 2, 3],   
+        'profits': [10, 20, 30]
+    },
+    'output' : 50
+}
+
+test8 = {
+    'input' : {
+        'capacity': 0,
+        'weights': [1, 2, 3],   
+        'profits': [10, 20, 30]
+    },
+    'output' : 0
+}
+
+test9 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [1, 2],   
+        'profits': [10]
+    },
+    'output' : "Invalid input"
+}
+
+test10 = {
+    'input' : {
+        'capacity': 5,
+        'weights': [1, 2, 3],   
+        'profits': [10, 20]
+    },
+    'output' : "Invalid input"
+}
+
+
+if __name__=="__main__":
+    
