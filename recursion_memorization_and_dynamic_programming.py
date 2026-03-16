@@ -229,25 +229,33 @@ Test cases:
 9. Capacity is zero
 10. Weights and profits have different lengths (invalid input)
 11. You do not use the complete capacity 
+
+Recursion approach
+1. We'll write a recursive function that computes max_profit(weights[idx:]), profits[idx:], capacity , with idx starting from 0.
+
+2. If weghts[idx] > capacity, the current element cannot be selected, so the maximum profit is the same as max_profit(weights[idx+1:], profits[idx+1:], capacity).
+
+3. Otherwise, there are two possibilities: we either pick weights[idx] or don't. We can recursively compute the maximum.
+
+A. If we don't pick weights[idx], once again the maximum profit for this case is max_profit(weights[idx+1:], profits[idx+1:], capacity)
+
+B. If we pick weights[idx], the maximum profit for this is profits[idx] + max_profit(weight[idx+1:], profits[idx+1:], capacity - weight[idx])
+
+4. If weights[idx:] is empty, the maximum profit for this case is 0.
 '''
 
 # attempt 1 using recursive approach
 def max_profit(weights, profits, capacity):
-    def helper(idx, remaining_capacity):
-        if idx >= len(weights) or remaining_capacity <= 0:
+    def max_profit_helper(weights, profits, capacity, idx):
+        if idx >= len(weights):
             return 0
-        
-        # Case 1: Include the current item
-        include_profit = 0
-        if weights[idx] <= remaining_capacity:
-            include_profit = profits[idx] + helper(idx + 1, remaining_capacity - weights[idx])
-        
-        # Case 2: Exclude the current item
-        exclude_profit = helper(idx + 1, remaining_capacity)
-        
-        return max(include_profit, exclude_profit)
-    
-    return helper(0, capacity)
+        if weights[idx] > capacity:
+            return max_profit_helper(weights, profits, capacity, idx + 1)
+        else:
+            return max(max_profit_helper(weights, profits, capacity, idx + 1), profits[idx] + max_profit_helper(weights, profits, capacity - weights[idx], idx + 1))
+    if len(weights) != len(profits):
+        return "Invalid input"
+    return max_profit_helper(weights, profits, capacity, 0)
 
 test0 = {
     'input' : {
@@ -348,6 +356,24 @@ test10 = {
     'output' : "Invalid input"
 }
 
+tests = [ test0, test1, test2, test3, test4, test5, test6, test7, test8, test9, test10 ]
+
+if test0 == 55 and test1 == 0 and test2 == 55 and test3 == 25 and test4 == 0 and test5 == 10 and test6 == 5 and test7 == 50 and test8 == 0 and test9 == "Invalid input" and test10 == "Invalid input":
+    print("All test cases passed!")
+else:    print("Some test cases failed.")
 
 if __name__=="__main__":
+    for t in tests:
+        weights = t['input']['weights']
+        profits = t['input']['profits']
+        capacity = t['input']['capacity']
+        expected_output = t['output']
+        result = max_profit(weights, profits, capacity)
+        print(f"Input: weights={weights}, profits={profits}, capacity={capacity}")
+        print(f"Expected Output: {expected_output}, Actual Output: {result}")
+        import time 
+        start = time.time()
+        result = max_profit(weights, profits, capacity)
+        end = time.time()
+        print(f"Time taken: {end - start:.4f} seconds")
     
