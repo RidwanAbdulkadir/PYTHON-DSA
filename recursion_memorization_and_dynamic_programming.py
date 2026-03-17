@@ -282,6 +282,23 @@ DYNAMIC PROGRAMMING APPROACH:
 
 #     return dp[n][capacity]
 
+# Memorization approach
+def max_profit_memo(weghts, profits, capacity):
+    memo = {}
+    def helper(weights, profits, capacity, idx):
+        if idx >= len(weights):
+            return 0
+        if (idx, capacity) in memo:
+            return memo[(idx, capacity)]
+        if weights[idx] > capacity:
+            memo[(idx, capacity)] = helper(weights, profits, capacity, idx + 1)
+        else:
+            memo[(idx, capacity)] = max(helper(weights, profits, capacity, idx + 1), profits[idx] + helper(weights, profits, capacity - weights[idx], idx + 1))
+        return memo[(idx, capacity)]
+    if len(weights) != len(profits):
+        return "Invalid input"
+    return helper(weights, profits, capacity, 0)
+
 
 test0 = {
     'input' : {
@@ -393,7 +410,7 @@ if __name__=="__main__":
         profits = t['input']['profits']
         capacity = t['input']['capacity']
         expected_output = t['output']
-        result = max_profit_recursive(weights, profits, capacity)
+        result = max_profit_memo(weights, profits, capacity)
         if result == expected_output:
             passed += 1
         elif result != expected_output:
