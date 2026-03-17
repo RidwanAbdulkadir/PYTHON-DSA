@@ -244,8 +244,8 @@ B. If we pick weights[idx], the maximum profit for this is profits[idx] + max_pr
 4. If weights[idx:] is empty, the maximum profit for this case is 0.
 '''
 
-# attempt 1 using recursive approach
-def max_profit(weights, profits, capacity):
+# # attempt 1 using recursive approach
+def max_profit_recursive(weights, profits, capacity):
     def max_profit_helper(weights, profits, capacity, idx):
         if idx >= len(weights):
             return 0
@@ -257,13 +257,39 @@ def max_profit(weights, profits, capacity):
         return "Invalid input"
     return max_profit_helper(weights, profits, capacity, 0)
 
+'''
+DYNAMIC PROGRAMMING APPROACH:
+1. We can use a 2D array to store the maximum profit for each subproblem, where the rows represent the items and the columns represent the capacities from 0 to the given capacity.
+2. We fill the table iteratively, starting from the base cases (capacity 0) and building up to the final solution.
+3. The time complexity of this approach is O(n*capacity) and the space complexity is O(n*capacity).
+
+'''
+# Dynamic programming approach
+# def max_profit_dp(weights, profits, capacity):
+#     if len(weights) != len(profits):
+#         return "Invalid input"
+#     n = len(weights)
+#     # Create a 2D array to store the maximum profit for each subproblem
+#     dp = [[0 for _ in range(capacity + 1)] for _ in range(n + 1)]
+
+#     # Fill the table iteratively
+#     for i in range(1, n + 1):
+#         for w in range(capacity + 1):
+#             if weights[i - 1] <= w:
+#                 dp[i][w] = max(dp[i - 1][w], profits[i - 1] + dp[i - 1][w - weights[i - 1]])
+#             else:
+#                 dp[i][w] = dp[i - 1][w]
+
+#     return dp[n][capacity]
+
+
 test0 = {
     'input' : {
         'capacity': 10,
         'weights': [1, 2, 3],   
         'profits': [10, 15, 40]
     },
-    'output' : 55
+    'output' : 65
 }
 
 test1 = {
@@ -281,7 +307,7 @@ test2 = {
         'weights': [1, 2, 3],   
         'profits': [10, 15, 40]
     },
-    'output' : 55
+    'output' : 65
 }
 
 test3 = {
@@ -290,7 +316,7 @@ test3 = {
         'weights': [1, 2, 3],   
         'profits': [10, 15, 40]
     },
-    'output' : 25
+    'output' : 55
 }
 
 test4 = {
@@ -358,22 +384,27 @@ test10 = {
 
 tests = [ test0, test1, test2, test3, test4, test5, test6, test7, test8, test9, test10 ]
 
-if test0 == 55 and test1 == 0 and test2 == 55 and test3 == 25 and test4 == 0 and test5 == 10 and test6 == 5 and test7 == 50 and test8 == 0 and test9 == "Invalid input" and test10 == "Invalid input":
-    print("All test cases passed!")
-else:    print("Some test cases failed.")
-
 if __name__=="__main__":
+    passed = 0
+    failed = 0
+    total = len(tests)
     for t in tests:
         weights = t['input']['weights']
         profits = t['input']['profits']
         capacity = t['input']['capacity']
         expected_output = t['output']
-        result = max_profit(weights, profits, capacity)
-        print(f"Input: weights={weights}, profits={profits}, capacity={capacity}")
-        print(f"Expected Output: {expected_output}, Actual Output: {result}")
-        import time 
-        start = time.time()
-        result = max_profit(weights, profits, capacity)
-        end = time.time()
-        print(f"Time taken: {end - start:.4f} seconds")
+        result = max_profit_recursive(weights, profits, capacity)
+        if result == expected_output:
+            passed += 1
+        elif result != expected_output:
+            failed += 1
+        else:
+            print(f"FAILED: Input: weights={weights}, profits={profits}, capacity={capacity}")
+            print(f"Expected: {expected_output}, Actual: {result}")
+    print(f"Passed: {passed}/{total}")
+    print(f"failed: {failed}/{total}")
+    if passed == total:
+        print("All test cases passed!")
+    else:
+        print("Some test cases failed.")
     
