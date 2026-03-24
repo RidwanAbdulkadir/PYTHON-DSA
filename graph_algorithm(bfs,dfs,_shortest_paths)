@@ -9,3 +9,47 @@ num_nodes = 5
 edges = [(0, 1), (0, 4), (1, 2), (1, 3), (1, 4), (2, 3),(3, 4)]
 print(num_nodes, len(edges))
 
+print([0] * 10) #just to show how to create a list of size 10 with all values initialized to 0 can also be used to create an empty adjacency list for a graph with 10 nodes. Note: DO NOT USE this method when trying to create an empty list in your code.
+
+print(list(range(10))) #this will create a list of size 10 with values from 0 to 9. This can be used to create an empty adjacency list for a graph with 10 nodes. Note: This method is more efficient than the previous one when trying to create an empty list in your code.
+
+l2 = [[] for _ in range(10)] #this will create a list of size 10 with empty lists as values. This can be used to create an empty adjacency list for a graph with 10 nodes. Note: This method is more efficient than the previous two methods when trying to create an empty list in your code.
+
+print([[] for _ in range(10)]) #this will create a list of size 10 with empty lists as values. This can be used to create an empty adjacency list for a graph with 10 nodes. Note: This method is more efficient than the previous two methods when trying to create an empty list in your code.
+
+l2[0].append(1) #this will add the value 1 to the list at index 0 in l2. This can be used to add an edge from node 0 to node 1 in the adjacency list representation of a graph.
+
+print(l2) #this will print the adjacency list representation of the graph after adding the edge from node 0 to node 1.
+
+l2[1].append(4) #this will add the value 4 to the list at index 1 in l2. This can be used to add an edge from node 1 to node 4 in the adjacency list representation of a graph.
+
+print(l2) #this will print the adjacency list representation of the graph after adding the edge from node 1 to node 4.
+
+for edge in edges:
+    print(edge) #this will print each edge in the edges list. This can be used to add all the edges in the edges list to the adjacency list representation of a graph.
+for n1, n2 in edges:
+    print(('n1:', n1, 'n2:', n2)) #this will print each edge in the edges list. This can be used to add all the edges in the edges list to the adjacency list representation of a graph.
+'''
+Question: Create a class to represent a graph as an adjacency list in python?'''
+
+class Graph:
+    def __init__(self, num_nodes): # this is the constructor method for the Graph class. It will be called when a Graph object is created. The num_nodes parameter will be used to initialize the number of nodes in the graph and create an empty adjacency list for the graph.
+        self.num_nodes = num_nodes # this will initialize the number of nodes in the graph when a Graph object is created. The num_nodes variable will be used to create an empty adjacency list for the graph.
+        self.adj_list = [[] for _ in range(num_nodes)] #this will create an empty adjacency list for the graph with the specified number of nodes. Each index in the list represents a node, and the value at that index is a list of adjacent nodes.
+    
+    def add_edge(self, n1, n2): # this method will add an edge from node n1 to node n2 in the adjacency list representation of the graph. For an undirected graph, we will also add an edge from node n2 to node n1.
+        self.adj_list[n1].append(n2) #for directed graph
+        self.adj_list[n2].append(n1) #for undirected graph
+
+    def __repr__(self):
+        return "\n".join([f"{node}: {neighbors}" for node, neighbors in enumerate(self.adj_list)]) #this will return a string representation of the adjacency list when the graph object is printed. Each line will show a node and its adjacent nodes.
+
+    def __str__(self):
+        return self.__repr__() #this will return the string representation of the adjacency list when the graph object is printed.
+    
+graph1 = Graph(num_nodes) #this will create a Graph object with the specified number of nodes. The adjacency list for the graph will be initialized as an empty list of lists.
+for n1, n2 in edges:
+    graph1.add_edge(n1, n2) #this will add all the edges in the edges list to the adjacency list representation of the graph using the add_edge method of the Graph class.
+
+print(graph1) #this will print the adjacency list representation of the graph after adding all the edges from the edges list. The __str__ method of the Graph class will be called to get the string representation of the adjacency list.
+
