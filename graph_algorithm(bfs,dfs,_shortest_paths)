@@ -53,3 +53,68 @@ for n1, n2 in edges:
 
 print(graph1) #this will print the adjacency list representation of the graph after adding all the edges from the edges list. The __str__ method of the Graph class will be called to get the string representation of the adjacency list.
 
+'''
+Question: Write a function to add an edge to a graph represented as an adjacency list?'''
+
+def add_edge(self, n1, n2):
+    self.adj_list[n1].append(n2) #for directed graph
+    self.adj_list[n2].append(n1) #for undirected graph
+
+'''
+Question: Write a function to remove an edge from a graph represented as an adjacency list?'''
+
+def remove_edge(self, n1, n2):
+    if n2 in self.adj_list[n1]: #for directed graph
+        self.adj_list[n1].remove(n2) #for directed graph
+    if n1 in self.adj_list[n2]: #for undirected graph
+        self.adj_list[n2].remove(n1) #for undirected graph
+
+'''
+ADJACENCY MATRIX REPRESENTATION OF A GRAPH
+ 
+Question: Create a class to represent a graph as an adjacency matrix in python?
+'''
+
+class GraphMatrix:
+    def __init__(self, num_nodes):
+        self.num_nodes = num_nodes # this will initialize the number of nodes in the graph when a GraphMatrix object is created. The num_nodes variable will be used to create an empty adjacency matrix for the graph.
+        self.adj_matrix = [[0] * num_nodes for _ in range(num_nodes)] #this will create an empty adjacency matrix for the graph with the specified number of nodes. The matrix will be initialized with 0s, indicating that there are no edges between any nodes.
+
+    def add_edge(self, n1, n2):
+        self.adj_matrix[n1][n2] = 1 #for directed graph
+        self.adj_matrix[n2][n1] = 1 #for undirected graph   
+
+    def __repr__(self):
+        return "\n".join([f"{node}: {neighbors}" for node, neighbors in enumerate(self.adj_matrix)]) #this will return a string representation of the adjacency matrix when the graph object is printed. Each line will show a node and its adjacent nodes.
+    
+    def __str__(self):
+        return self.__repr__() #this will return the string representation of the adjacency matrix when the graph object is printed.
+    
+
+'''
+GRAPH TRAVERSAL ALGORITHMS:
+
+Breadth-First Search (BFS) and Depth-First Search (DFS) are two common graph traversal algorithms. BFS explores the graph level by level, while DFS explores as far as possible along each branch before backtracking.
+
+Question: Implement a BFS given a source code in a graph using python. 
+
+BFS pseudocode:
+
+1. procedure BFS(G, root) is
+2.     let Q be a queue
+3.     label root as discovered
+4.     Q.enqueue(root)
+5.     while Q is not empty do
+6.         v := Q.dequeue()
+7.         if v is the goal then
+8.             return v
+9.          for all edges from v to w in G.adjacentEdges(v) do
+10.             if w is not labeled as discovered then
+11.                 label w as discovered
+12.                 Q.enqueue(w)
+
+
+
+'''
+
+
