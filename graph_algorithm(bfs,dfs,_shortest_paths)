@@ -113,8 +113,21 @@ BFS pseudocode:
 11.                 label w as discovered
 12.                 Q.enqueue(w)
 
-
-
 '''
+from collections import deque
+def bfs(graph, start):
+    visited = [False] * graph.num_nodes #this will create a list to keep track of visited nodes in the BFS traversal. The list will be initialized with False values, indicating that no nodes have been visited yet.
+    queue = deque([start]) #this will create a queue to keep track of nodes to visit in the BFS traversal. The queue will be initialized with the starting node.
+
+    while queue: #this will continue the BFS traversal until there are no more nodes to visit in the queue.
+        node = queue.popleft() #this will remove and return the leftmost node from the queue, which is the next node to visit in the BFS traversal.
+
+        if not visited[node]: #this will check if the current node has not been visited yet. If it has not been visited, we will mark it as visited and add its adjacent nodes to the queue for further exploration.
+            print(node) #this will print the current node being visited in the BFS traversal.
+            visited[node] = True #this will mark the current node as visited in the visited list.
+
+            for neighbor in graph.adj_list[node]: #this will iterate through the adjacent nodes of the current node in the adjacency list representation of the graph.
+                if not visited[neighbor]: #this will check if each adjacent node has not been visited yet. If it has not been visited, we will add it to the queue for further exploration.
+                    queue.append(neighbor) #this will add the adjacent node to the right end of the queue for further exploration in the BFS traversal.
 
 
