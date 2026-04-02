@@ -130,7 +130,100 @@ def bfs(graph, start):
                 if not visited[neighbor]: #this will check if each adjacent node has not been visited yet. If it has not been visited, we will add it to the queue for further exploration.
                     queue.append(neighbor) #this will add the adjacent node to the right end of the queue for further exploration in the BFS traversal.
 
+print(bfs(graph1, 3)) # This returns the BFS traversal starting from node 3 in the graph1 object. The output will be the nodes visited in the order they were visited during the BFS traversal. Note that the function does not return any value, so it will print the nodes visited and then return None.
 
 '''
-bdsbfkbfsakdj
+Question: Write a function to check if all the nodes in a graph are connected. 
 '''
+def connected_nodes(graph, start):
+    visited = [False] * graph.num_nodes #this will create a list to keep track of visited nodes in the BFS traversal. The list will be initialized with False values, indicating that no nodes have been visited yet.
+    queue = deque([start]) #this will create a queue to keep track of nodes to visit in the BFS traversal. The queue will be initialized with the starting node.
+
+    while queue: #this will continue the BFS traversal until there are no more nodes to visit in the queue.
+        node = queue.popleft() #this will remove and return the leftmost node from the queue, which is the next node to visit in the BFS traversal.
+
+        if not visited[node]: #this will check if the current node has not been visited yet. If it has not been visited, we will mark it as visited and add its adjacent nodes to the queue for further exploration.
+            visited[node] = True #this will mark the current node as visited in the visited list.
+
+            for neighbor in graph.adj_list[node]: #this will iterate through the adjacent nodes of the current node in the adjacency list representation of the graph.
+                if not visited[neighbor]: #this will check if each adjacent node has not been visited yet. If it has not been visited, we will add it to the queue for further exploration.
+                    queue.append(neighbor) #this will add the adjacent node to the right end of the queue for further exploration in the BFS traversal.
+
+    return all(visited) #this will return True if all nodes have been visited (i.e., all values in the visited list are True), indicating that all nodes in the graph are connected. Otherwise, it will return False.
+
+print(connected_nodes(graph1, 0)) # This will check if all nodes in the graph1 object are connected starting from node 0. The output will be True if all nodes are connected, and False otherwise.
+
+'''
+Question: Find the number of connected components in a graph.
+'''
+def count_connected_components(graph):
+    visited = [False] * graph.num_nodes #this will create a list to keep track of visited nodes in the BFS traversal. The list will be initialized with False values, indicating that no nodes have been visited yet.
+    count = 0 #this will initialize a counter to keep track of the number of connected components in the graph.
+
+    for node in range(graph.num_nodes): #this will iterate through each node in the graph.
+        if not visited[node]: #this will check if the current node has not been visited yet. If it has not been visited, we will perform a BFS traversal starting from that node to mark all nodes in that connected component as visited.
+            bfs(graph, node) #this will perform a BFS traversal starting from the current node to mark all nodes in that connected component as visited.
+            count += 1 #this will increment the counter for connected components by 1 after completing the BFS traversal for that component.
+
+    return count #this will return the total number of connected components in the graph.
+    
+print(count_connected_components(graph1)) #This will return the number of connected components in the graph. 
+
+'''
+DfS pseudocode:
+
+procedure DFS_iterative(G, root) is
+    let S be a stack
+    label root as discovered
+    S.push(root)
+    while S is not empty do
+        v := S.pop()
+        if v is the goal then
+            return v
+        for all edges from v to w in G.adjacentEdges(v) do
+            if w is not labeled as discovered then
+                label w as discovered
+                S.push(w)   
+'''
+
+def dfs(graph, start):
+    visited = [False] * graph.num_nodes #this will create a list to keep track of visited nodes in the DFS traversal. The list will be initialized with False values, indicating that no nodes have been visited yet.
+    stack = [start] #this will create a stack to keep track of nodes to visit in the DFS traversal. The stack will be initialized with the starting node.
+
+    while stack: #this will continue the DFS traversal until there are no more nodes to visit in the stack.
+        node = stack.pop() #this will remove and return the topmost node from the stack, which is the next node to visit in the DFS traversal.
+
+        if not visited[node]: #this will check if the current node has not been visited yet. If it has not been visited, we will mark it as visited and add its adjacent nodes to the stack for further exploration.
+            print(node) #this will print the current node being visited in the DFS traversal.
+            visited[node] = True #this will mark the current node as visited in the visited list.
+
+            for neighbor in graph.adj_list[node]: #this will iterate through the adjacent nodes of the current node in the adjacency list representation of the graph.
+                if not visited[neighbor]: #this will check if each adjacent node has not been visited yet. If it has not been visited, we will add it to the stack for further exploration.
+                    stack.append(neighbor) #this will add the adjacent node to the top of the stack for further exploration in the DFS traversal.
+        
+print(dfs(graph1, 3)) # This returns the DFS traversal starting from node 3 in the graph1 object. The output will be the nodes visited in the order they were visited during the DFS traversal. Note that the function does not return any value, so it will print the nodes visited and then return None.
+
+'''
+Question: Write  a function to detect if there is a cycle in a graph using DFS traversal.
+'''
+def has_cycle(graph):
+    visited = [False] * graph.num_nodes #this will create a list to keep track of visited nodes in the DFS traversal. The list will be initialized with False values, indicating that no nodes have been visited yet.
+
+    def dfs(node, parent):
+        visited[node] = True #this will mark the current node as visited in the visited list.
+
+        for neighbor in graph.adj_list[node]: #this will iterate through the adjacent nodes of the current node in the adjacency list representation of the graph.
+            if not visited[neighbor]: #this will check if each adjacent node has not been visited yet. If it has not been visited, we will perform a DFS traversal on that node.
+                if dfs(neighbor, node): #this will perform a DFS traversal on the adjacent node. If it returns True, it means a cycle has been detected.
+                    return True
+            elif neighbor != parent: #this will check if the adjacent node has already been visited and is not the parent of the current node. If this condition is true, it means a cycle has been detected.
+                return True
+
+        return False #if we finish checking all adjacent nodes and do not find any cycles, we return False.
+
+    for node in range(graph.num_nodes): #this will iterate through each node in the graph.
+        if not visited[node]: #this will check if the current node has not been visited yet. If it has not been visited, we will perform a DFS traversal starting from that node to check for cycles.
+            if dfs(node, -1): #this will perform a DFS traversal starting from the current node. The parent parameter is set to -1 since the starting node does not have a parent.
+                return True
+
+    return False #if we finish checking all nodes and do not find any cycles, we return False.
