@@ -232,7 +232,7 @@ def has_cycle(graph):
 Question: Define a class to represent weighted and directed graphs in python.
 '''
 
-class graph:
+class graph_two:
     def __init__(self, num_nodes, edges, directed=False, weighted=False):
         self.num_nodes = num_nodes # this will initialize the number of nodes in the graph when a graph object is created. The num_nodes variable will be used to create an empty adjacency list for the graph.
         self.directed = directed # this will initialize the directed attribute of the graph object. It will be set to True if the graph is directed, and False if it is undirected. This attribute will be used in the add_edge method to determine how to add edges to the adjacency list.
@@ -246,3 +246,56 @@ class graph:
             else: #this will check if the graph is unweighted. If it is unweighted, we will unpack the edge into n1 and n2, and call the add_edge method with these parameters.
                 n1, n2 = edge #this will unpack the edge into n1 and n2. The edge is expected to be a tuple or list containing two elements: the first node (n1) and the second node (n2). This is used for unweighted graphs where the weight of the edge is not specified.
                 self.add_edge(n1, n2) #this will call the add_edge method with n1 and n2 as parameters to add the edge to the adjacency list based on whether the graph is directed and/or weighted.   
+
+    def add_edge(self, n1, n2, weight=1):
+        if self.weighted: #this will check if the graph is weighted. If it is weighted, we will add a tuple of (n2, weight) to the adjacency list for n1. If the graph is directed, we will only add this edge. If the graph is undirected, we will also add a tuple of (n1, weight) to the adjacency list for n2.
+            self.adj_list[n1].append((n2, weight)) #for weighted graph, this will add a tuple of (n2, weight) to the adjacency list for n1.
+            if not self.directed: #this will check if the graph is undirected. If it is undirected, we will also add a tuple of (n1, weight) to the adjacency list for n2.
+                self.adj_list[n2].append((n1, weight)) #for weighted and undirected graph, this will add a tuple of (n1, weight) to the adjacency list for n2.
+        else: #this will check if the graph is unweighted. If it is unweighted, we will add n2 to the adjacency list for n1. If the graph is directed, we will only add this edge. If the graph is undirected, we will also add n1 to the adjacency list for n2.
+            self.adj_list[n1].append(n2) #for unweighted graph, this will add n2 to the adjacency list for n1.
+            if not self.directed: #this will check if the graph is undirected. If it is undirected, we will also add n1 to the adjacency list for n2.
+                self.adj_list[n2].append(n1) #for unweighted and undirected graph, this will add n1 to the adjacency list for n2.  
+
+    def __repr__(self):
+         result = []
+         for node, neighbors in enumerate(self.adj_list):
+             if self.weighted:
+                 neighbor_str = ", ".join([f"{neighbor} (weight: {weight})" for neighbor, weight in neighbors]) #this will create a string representation of the neighbors for a weighted graph, showing each neighbor and its corresponding weight.
+             else:
+                 neighbor_str = ", ".join(map(str, neighbors)) #this will create a string representation of the neighbors for an unweighted graph, showing each neighbor as a string.
+             result.append(f"{node}: {neighbor_str}") #this will append a string representation of the current node and its neighbors to the result list.
+         return "\n".join(result) #this will return a string representation of the adjacency list when the graph object is printed. Each line will show a node and its adjacent nodes, along with weights if the graph is weighted.
+    
+graph2 = graph_two(num_nodes, edges)
+print(graph2)
+
+num_nodes_weighted = 5
+edges_weighted = [(0, 1, 2), (0, 4, 3), (1, 2, 1), (1, 3, 4), (1, 4, 5), (2, 3, 6), (3, 4, 7)]
+graph3 = graph_two(num_nodes_weighted, edges_weighted, directed=True, weighted=True)
+print(graph3)
+
+'''
+Question: Write a function to find the length of the shortest path between two nodes in a weighted directed graph. 
+'''
+def dijkstra(graph, start, end):
+    import heapq
+    distances = {node: float('inf') for node in range(graph.num_nodes)} #this will create a dictionary to keep track of the shortest distance from the start node to each node in the graph. The distances will be initialized to infinity (float('inf')) to indicate that they are initially unreachable.
+    distances[start] = 0 #this will set the distance from the start node to itself as 0, since it takes no steps to reach itself.
+    priority_queue = [(0, start)] #this will create a priority queue (min-heap) to keep track of nodes to explore based on their current shortest distance from the start node. The queue will be initialized with a tuple of (distance, node) for the start node.
+
+    while priority_queue: #this will continue the Dijkstra's algorithm until there are no more nodes to explore in the priority queue.
+        current_distance, current_node = heapq.heappop(priority_queue) #this will remove and return the tuple with the smallest distance from the priority queue, giving us the current node to explore and its distance from the start node.
+
+        if current_node == end: #this will check if the current node is the end node we are trying to reach. If it is, we can return the current distance as the length of the shortest path.
+            return current_distance
+
+        if current_distance > distances[current_node]: #this will check if the current distance is greater than the recorded shortest distance for the current node. If it is greater, it means we have already found a shorter path to this node, so we can skip further exploration from this node.
+            continue
+
+        for neighbor, weight in graph.adj_list[current_node]: #this will iterate through the adjacent nodes and their corresponding weights for the current node in the adjacency list representation of the graph.
+            distance = current_distance + weight #this will calculate the new distance to the neighbor by adding the weight of the edge from the current node to the neighbor to the current distance.
+
+            if distance < distances[neighbor]: #this will check if the newly calculated distance to the neighbor is less than its currently recorded shortest distance. If it is less, we have found a shorter path to this neighbor.
+                distances[neighbor] = distance #this will update the shortest distance for this neighbor in the distances dictionary.
+                heapq.heappush(priority_queue, (distance, neighbor)) #this will add the neighbor and its updated distance to the priority queue for further exploration. 
