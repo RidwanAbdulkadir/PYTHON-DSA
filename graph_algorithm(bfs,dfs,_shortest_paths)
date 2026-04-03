@@ -227,3 +227,22 @@ def has_cycle(graph):
                 return True
 
     return False #if we finish checking all nodes and do not find any cycles, we return False.
+
+'''
+Question: Define a class to represent weighted and directed graphs in python.
+'''
+
+class graph:
+    def __init__(self, num_nodes, edges, directed=False, weighted=False):
+        self.num_nodes = num_nodes # this will initialize the number of nodes in the graph when a graph object is created. The num_nodes variable will be used to create an empty adjacency list for the graph.
+        self.directed = directed # this will initialize the directed attribute of the graph object. It will be set to True if the graph is directed, and False if it is undirected. This attribute will be used in the add_edge method to determine how to add edges to the adjacency list.
+        self.weighted = weighted # this will initialize the weighted attribute of the graph object. It will be set to True if the graph is weighted, and False if it is unweighted. This attribute will be used in the add_edge method to determine how to add edges to the adjacency list.
+        self.adj_list = [[] for _ in range(num_nodes)] #this will create an empty adjacency list for the graph with the specified number of nodes. Each index in the list represents a node, and the value at that index is a list of adjacent nodes. The add_edge method will populate this adjacency list based on the edges provided.
+
+        for edge in edges: #this will iterate through each edge in the edges list provided when creating the graph object. The add_edge method will be called for each edge to populate the adjacency list based on whether the graph is directed and/or weighted.
+            if weighted: #this will check if the graph is weighted. If it is weighted, we will unpack the edge into n1, n2, and weight, and call the add_edge method with these parameters.
+                n1, n2, weight = edge #this will unpack the edge into n1, n2, and weight. The edge is expected to be a tuple or list containing three elements: the first node (n1), the second node (n2), and the weight of the edge between them.
+                self.add_edge(n1, n2, weight) #this will call the add_edge method with n1, n2, and weight as parameters to add the edge to the adjacency list based on whether the graph is directed and/or weighted.
+            else: #this will check if the graph is unweighted. If it is unweighted, we will unpack the edge into n1 and n2, and call the add_edge method with these parameters.
+                n1, n2 = edge #this will unpack the edge into n1 and n2. The edge is expected to be a tuple or list containing two elements: the first node (n1) and the second node (n2). This is used for unweighted graphs where the weight of the edge is not specified.
+                self.add_edge(n1, n2) #this will call the add_edge method with n1 and n2 as parameters to add the edge to the adjacency list based on whether the graph is directed and/or weighted.   
