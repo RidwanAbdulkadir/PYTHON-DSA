@@ -319,3 +319,6 @@ def update_distances(graph, current_node, distances, priority_queue):
         if distance < distances[neighbor]: #this will check if the newly calculated distance to the neighbor is less than its currently recorded shortest distance. If it is less, we have found a shorter path to this neighbor.
             distances[neighbor] = distance #this will update the shortest distance for this neighbor in the distances dictionary.
             heapq.heappush(priority_queue, (distance, neighbor)) #this will add the neighbor and its updated distance to the priority queue for further exploration.
+
+'''
+'''
