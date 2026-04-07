@@ -329,7 +329,7 @@ def shortest_path(graph, start, end):
                 path.append(node)
                 node = prev[node]
             path.reverse()
-            return path, current_distance
+            return path, current_distance, prev
 
         if current_distance > distances[current_node]: #this will check if the current distance is greater than the recorded shortest distance for the current node. If it is greater, it means we have already found a shorter path to this node, so we can skip further exploration from this node.
             continue
@@ -369,7 +369,11 @@ graph4 = graph_two(num_nodes_weighted, edges_weighted, directed=True, weighted=T
 print(graph4) #this will print the adjacency list representation of the graph4 object, showing
 result = shortest_path(graph4, 0, 4)
 if result:
-    path, length = result
+    path, length, prev = result
     print(f"Shortest path: {path}, Length: {length}")
+    print(f"Predecessors (parents): {prev}")
 else:
     print("No path found")
+
+
+### The End.
