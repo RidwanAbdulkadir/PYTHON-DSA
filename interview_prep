@@ -1,0 +1,47 @@
+'''
+problem: I want to build a web extension that detects videos on the web page and allows users to download them. I want to use python for this project. Can you help me with the basic structure of the extension and how to detect videos on a webpage?
+
+SOLUTION:
+
+To build a web extension that detects videos on a webpage and allows users to download them using Python, you can follow the basic structure outlined below. Note that web extensions typically use JavaScript for the frontend, but you can use Python for the backend processing.
+
+1. **Extension Structure**:
+```my_video_downloader_extension/
+├── manifest.json
+├── background.js
+├── content.js
+└── utils.py
+```
+- `manifest.json`: This file defines the extension's metadata and permissions.
+- `background.js`: This script runs in the background and handles events such as user interactions.
+- `content.js`: This script runs in the context of the webpage and is responsible for detecting videos.
+- `utils.py`: This file contains utility functions for video detection and downloading.
+2. **manifest.json**:
+```json
+{
+  "manifest_version": 2,
+  "name": "Video Downloader",
+  "version": "1.0",
+  "description": "Detects videos on the webpage and allows users to download them.",
+  "permissions": [
+    "activeTab",
+    "downloads"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
+```
+3. **content.js**:
+```javascript// Function to detect video elements on the webpage
+function detectVideos() {
+
+
+'''
