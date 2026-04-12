@@ -147,6 +147,24 @@ def min_steps(A, B):
 
     return dp[m][n] # Return the minimum edit distance to convert A to B
 
+# Test cases
+A1 = "kitten"
+B1 = "sitting"
+print(min_steps(A1, B1))  # Output: 3
+
+A2 = "flaw"
+B2 = "lawn"
+print(min_steps(A2, B2))  # Output: 2
+
+A3 = "intention"
+B3 = "execution"
+print(min_steps(A3, B3))  # Output: 5
+
+A4 = "abc"
+B4 = "def"
+print(min_steps(A4, B4))  # Output: 3
+
+
 # Using Recursion
 def min_steps_recursive(A, B):
     if not A: # If string A is empty, the minimum edit distance is the length of string B (insert all characters)
@@ -163,3 +181,61 @@ def min_steps_recursive(A, B):
                    min_steps_recursive(A[1:], B[1:])) # Replace a character in A with a character from B
  
 
+# Test cases
+A1 = "kitten"
+B1 = "sitting"
+print(min_steps_recursive(A1, B1))  # Output: 3
+
+A2 = "flaw"
+B2 = "lawn"
+print(min_steps_recursive(A2, B2))  # Output: 2
+
+A3 = "intention"
+B3 = "execution"
+print(min_steps_recursive(A3, B3))  # Output: 5
+
+A4 = "abc"
+B4 = "def"
+print(min_steps_recursive(A4, B4))  # Output: 3 
+
+
+# Using memorisation
+def min_steps_memo(A, B):
+    memo = {} # Initialize a dictionary to store previously computed results for subproblems
+    def helper(i, j): # Define a helper function that takes the current indices of strings A and B as arguments
+        if (i, j) in memo: # If the result for the current indices is already computed and stored in the memoization dictionary, return the stored result
+            return memo[(i, j)] # Return the stored result for the current indices from the memoization dictionary
+        if i == len(A): # If string A is empty, the minimum edit distance is the length of string B (insert all characters)
+            return len(B) - j
+        if j == len(B): # If string B is empty, the minimum edit distance is the length of string A (delete all characters)
+            return len(A) - i
+
+        if A[i] == B[j]: # If the current characters of both strings are the same, no operation is needed
+            result = helper(i + 1, j + 1) # Move to the next characters in both strings and store the result in a variable before returning it
+            memo[(i, j)] = result # Store the result for the current indices in the memoization dictionary before returning it
+            return result # Return the minimum edit distance for the current indices
+
+        # If the current characters are different, consider all three operations and take the minimum
+        result = 1 + min(helper(i + 1, j),      # Delete a character from A
+                         helper(i, j + 1),      # Insert a character into A
+                         helper(i + 1, j + 1)) # Replace a character in A with a character from B and store the result in a variable before returning it
+        memo[(i, j)] = result # Store the result for the current indices in the memoization dictionary before returning it
+        return result # Return the minimum edit distance for the current indices
+    return helper(0, 0) # Call the helper function with the initial indices (0, 0)
+
+# Test cases
+A1 = "kitten"
+B1 = "sitting"
+print(min_steps_memo(A1, B1))  # Output: 3
+
+A2 = "flaw"
+B2 = "lawn"
+print(min_steps_memo(A2, B2))  # Output: 2
+
+A3 = "intention"
+B3 = "execution"
+print(min_steps_memo(A3, B3))  # Output: 5
+
+A4 = "abc"
+B4 = "def"
+print(min_steps_memo(A4, B4))  # Output: 3
