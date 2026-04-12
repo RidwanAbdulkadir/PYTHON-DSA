@@ -112,5 +112,54 @@ print(find_subarray_with_sum( [3,1,2,5,7,8,9,1,12 ], 10)) # Output: No subarray 
 
 
 '''
+The following question was asked during a coding interview at google:
+
+MINIMUM EDIT DISTANCE
+
+Question: Given two strings A and B, find the minimum number of steps required to convert A to B. (each operation is counted as 1 step). You have the following 3 operations permitted on a word:
+
+i. Insert a character
+ii. Delete a character
+iii. Replace a character
+
+
 '''
+
+def min_steps(A, B):
+    m = len(A) # Get the length of string A
+    n = len(B) # Get the length of string B
+    dp = [[0] * (n + 1) for _ in range(m + 1)] # Create a 2D list to store the minimum edit distance for each subproblem
+
+    for i in range(m + 1): # Initialize the first column of the dp table
+        dp[i][0] = i # The minimum edit distance to convert a string of length i to an empty string is i (delete all characters)
+
+    for j in range(n + 1): # Initialize the first row of the dp table
+        dp[0][j] = j # The minimum edit distance to convert an empty string to a string of length j is j (insert all characters)
+
+    for i in range(1, m + 1): # Fill the dp table using dynamic programming
+        for j in range(1, n + 1):
+            if A[i - 1] == B[j - 1]: # If the characters are the same, no operation is needed
+                dp[i][j] = dp[i - 1][j - 1] # The minimum edit distance is the same as the previous subproblem
+            else: # If the characters are different, consider all three operations and take the minimum
+                dp[i][j] = min(dp[i - 1][j] + 1,      # Delete a character from A
+                               dp[i][j - 1] + 1,      # Insert a character into A
+                               dp[i - 1][j - 1] + 1) # Replace a character in A with a character from B
+
+    return dp[m][n] # Return the minimum edit distance to convert A to B
+
+# Using Recursion
+def min_steps_recursive(A, B):
+    if not A: # If string A is empty, the minimum edit distance is the length of string B (insert all characters)
+        return len(B)
+    if not B: # If string B is empty, the minimum edit distance is the length of string A (delete all characters)
+        return len(A)
+
+    if A[0] == B[0]: # If the first characters of both strings are the same, no operation is needed
+        return min_steps_recursive(A[1:], B[1:]) # Move to the next characters in both strings
+
+    # If the first characters are different, consider all three operations and take the minimum
+    return 1 + min(min_steps_recursive(A[1:], B),      # Delete a character from A
+                   min_steps_recursive(A, B[1:]),      # Insert a character into A
+                   min_steps_recursive(A[1:], B[1:])) # Replace a character in A with a character from B
+ 
 
