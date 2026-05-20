@@ -75,3 +75,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    print(fibonacci.cache_info()) # This will print the cache information for the Fibonacci function, showing the number of hits, misses, current size, and maximum size of the cache.
