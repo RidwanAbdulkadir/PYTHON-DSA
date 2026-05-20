@@ -42,18 +42,19 @@ print(count_vowels_cached("Hello World"))  # This will return the cached result 
 @lru_cache(maxsize=128)
 def count_vowels_cached(sentence: str) -> int:
     """Counts the number of vowels in a given sentence (with LRU caching)."""
-    print(f"Counting vowels in: '{sentence}'") #
-    return sum(1 for char in sentence if char.lower() in 'aeiou')
+    print(f"Counting vowels in: '{sentence}'") # This will only print the first time we call the function with a new sentence, subsequent calls with the same sentence will return the cached result without printing.
+    return sum(1 for char in sentence if char.lower() in 'aeiou') # This will compute the count of vowels in the sentence and return it.
 
 @measure
 def main() -> None:
     sentences: list[str] = [
         "Hello World",
         "Python is great",
-        "LRU Cache is useful",]
+        "LRU Cache is useful",] # We have a list of sentences that we will use to test our cached function. Each sentence will be processed multiple times to demonstrate the caching mechanism.
     
-    for sentence in sentences:
-        for i in range(1_000_000):
-            count_vowels_cached(sentence)
+    for sentence in sentences: # We iterate over each sentence in the list of sentences.
+        for i in range(1_000_000): # We call the cached function 1 million times for each sentence to demonstrate the performance benefits of caching. The first call will compute the result and cache it, while subsequent calls will return the cached result, significantly reducing execution time.
+            count_vowels_cached(sentence) # This calls the cached function to count the vowels in the current sentence. The first call for each unique sentence will compute the result and cache it, while subsequent calls will return the cached result, demonstrating the efficiency of the LRU cache.
 
 if __name__ == "__main__":    main()
+print(count_vowels_cached.cache_info()) # This will print the cache information, showing the number of hits, misses, current size, and maximum size of the cache.
