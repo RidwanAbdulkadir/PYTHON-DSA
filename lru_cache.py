@@ -58,3 +58,20 @@ def main() -> None:
 
 if __name__ == "__main__":    main()
 print(count_vowels_cached.cache_info()) # This will print the cache information, showing the number of hits, misses, current size, and maximum size of the cache.
+
+
+# Another example with fibonacci sequence, which is a common example to demonstrate the benefits of caching due to its recursive nature.
+@lru_cache(maxsize=None) # We set maxsize to None to allow unlimited caching, which is useful for the Fibonacci function as it can generate a large number of unique inputs.
+def fibonacci(n: int) -> int:
+    """Returns the nth Fibonacci number."""
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2) # This is the recursive definition of the Fibonacci sequence. The LRU cache will store previously computed results, significantly improving performance for larger values of n.  
+
+@measure
+def main() -> None:
+    result: int = fibonacci(10) # This will compute the 10th Fibonacci number. The first time this function is called, it will compute the result recursively, but subsequent calls with the same input will return the cached result, demonstrating the efficiency of the LRU cache.
+    print(result)
+
+if __name__ == "__main__":
+    main()
